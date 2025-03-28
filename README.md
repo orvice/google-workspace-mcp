@@ -60,6 +60,7 @@ make build
 ## Available Tools
 
 - `directory_users` - List all users in your Google Workspace directory
+- `create_user` - Create a new user in Google Workspace
 - `list_gmail` - List recent Gmail messages (requires Gmail API access)
 - `list_calendar_events` - List upcoming calendar events for a user (requires Calendar API access)
 
@@ -67,6 +68,6 @@ make build
 
 When setting up domain-wide delegation for your service account, ensure you grant the following OAuth scopes:
 
-- `https://www.googleapis.com/auth/admin.directory.user` - For accessing directory user information
+- `https://www.googleapis.com/auth/admin.directory.user` - For accessing and managing directory user information
 - `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages
 - `https://www.googleapis.com/auth/calendar.readonly` - For reading calendar events

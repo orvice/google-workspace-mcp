@@ -39,6 +39,53 @@ func (d *Directory) Users(ctx context.Context, request mcp.CallToolRequest) (*mc
 	return mcp.NewToolResultText(resp), nil
 }
 
+func (d *Directory) CreateUser(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	// Extract required parameters
+	email, ok := request.Params.Arguments["email"].(string)
+	if !ok {
+		return nil, fmt.Errorf("email is required")
+	}
+	
+	firstName, ok := request.Params.Arguments["firstName"].(string)
+	if !ok {
+		return nil, fmt.Errorf("firstName is required")
+	}
+	
+	lastName, ok := request.Params.Arguments["lastName"].(string)
+	if !ok {
+		return nil, fmt.Errorf("lastName is required")
+	}
+	
+	password, ok := request.Params.Arguments["password"].(string)
+	if !ok {
+		return nil, fmt.Errorf("password is required")
+	}
+	
+	// Create user object
+	user := &admin.User{
+		PrimaryEmail: email,
+		Name: &admin.UserName{
+			GivenName:  firstName,
+			FamilyName: lastName,
+			FullName:   firstName + " " + lastName,
+		},
+		Password: password,
+	}
+	
+	// Create user in Google Workspace
+	createdUser, err := d.client.Users.Insert(user).Do()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user: %w", err)
+	}
+	
+	resp := fmt.Sprintf("User created successfully:\nEmail: %s\nName: %s\nID: %s", 
+		createdUser.PrimaryEmail, 
+		createdUser.Name.FullName,
+		createdUser.Id)
+	
+	return mcp.NewToolResultText(resp), nil
+}
+
 func (d *Directory) ListEmail(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	email, ok := request.Params.Arguments["email"].(string)
 	if !ok {
@@ -127,6 +174,28 @@ func (d *Directory) Toolls() []Tool {
 				),
 			),
 			Handler: d.Users,
+		},
+		{
+			Tool: mcp.NewTool("create_user",
+				mcp.WithDescription("Create a new user in Google Workspace"),
+				mcp.WithString("email",
+					mcp.Required(),
+					mcp.Description("Email address for the new user"),
+				),
+				mcp.WithString("firstName",
+					mcp.Required(),
+					mcp.Description("First name of the user"),
+				),
+				mcp.WithString("lastName",
+					mcp.Required(),
+					mcp.Description("Last name of the user"),
+				),
+				mcp.WithString("password",
+					mcp.Required(),
+					mcp.Description("Initial password for the user"),
+				),
+			),
+			Handler: d.CreateUser,
 		},
 		{
 			Tool: mcp.NewTool("list_gmail",
