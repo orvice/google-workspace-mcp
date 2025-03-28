@@ -23,7 +23,11 @@ func NewDirectory() *Directory {
 }
 
 func (d *Directory) Users(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	users, err := d.client.Users.List().Do()
+	domain, ok := request.Params.Arguments["domain"].(string)
+	if !ok {
+		return nil, fmt.Errorf("domain is required")
+	}
+	users, err := d.client.Users.List().Domain(domain).Do()
 	if err != nil {
 		return nil, err
 	}
@@ -39,6 +43,10 @@ func (d *Directory) Toolls() []Tool {
 		{
 			Tool: mcp.NewTool("directory_users",
 				mcp.WithDescription("List Directory Users"),
+				mcp.WithString("domain",
+					mcp.Required(),
+					mcp.Description("domain"),
+				),
 			),
 			Handler: d.Users,
 		},

@@ -9,4 +9,3 @@ type Tool struct {
 	Tool    mcp.Tool
 	Handler server.ToolHandlerFunc
 }
-
