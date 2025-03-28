@@ -46,7 +46,7 @@ make build
       "args": [],
       "env": {
         "GOOGLE_SERVICE_ACCOUNT": "test.json",
-        "GOOGLE_ADMIN_EMAIL": "admin@"
+        "GOOGLE_ADMIN_EMAIL": "admin@yourdomain.com"
       },
       "disabled": false,
       "autoApprove": []
@@ -55,8 +55,16 @@ make build
 }
 ```
 
+> **Note:** Make sure your service account has the necessary API access enabled in Google Cloud Console (Admin SDK API and Gmail API).
+
 ## Available Tools
 
 - `directory_users` - List all users in your Google Workspace directory
+- `list_gmail` - List recent Gmail messages (requires Gmail API access)
 
- 
+## Required OAuth Scopes
+
+When setting up domain-wide delegation for your service account, ensure you grant the following OAuth scopes:
+
+- `https://www.googleapis.com/auth/admin.directory.user` - For accessing directory user information
+- `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages

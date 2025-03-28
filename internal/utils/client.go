@@ -6,12 +6,14 @@ import (
 	"os"
 
 	"butterfly.orx.me/core/log"
+	"golang.org/x/oauth2"
 	goauth "golang.org/x/oauth2/google"
 	admin "google.golang.org/api/admin/directory/v1"
+	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 )
 
-func DefaultClient() (*admin.Service, error) {
+func defaultServiceAccount() ([]byte, error) {
 	path := os.Getenv("GOOGLE_SERVICE_ACCOUNT")
 	if path == "" {
 		return nil, fmt.Errorf("GOOGLE_SERVICE_ACCOUNT environment variable not set")
@@ -21,6 +23,14 @@ func DefaultClient() (*admin.Service, error) {
 	sa, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read service account file: %w", err)
+	}
+	return sa, nil
+}
+
+func DefaultClient() (*admin.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
 	}
 
 	// Get admin email from environment variable
@@ -33,13 +43,31 @@ func DefaultClient() (*admin.Service, error) {
 	return newClient(sa, adminEmail)
 }
 
-func newClient(sa []byte, adminEmail string) (*admin.Service, error) {
+func NewGmailClient(email string) (*gmail.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
+	}
+	// Create client using service account and admin email
+	return newGmailClient(sa, email)
+}
+
+func newGmailClient(sa []byte, email string) (*gmail.Service, error) {
+	ts, err := tokenSource(sa, email, gmail.GmailReadonlyScope)
+	if err != nil {
+		return nil, err
+	}
+
+	srv, err := gmail.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, err
+	}
+	return srv, nil
+}
+
+func tokenSource(sa []byte, adminEmail string, scopes ...string) (oauth2.TokenSource, error) {
 	ctx := context.Background()
 	logger := log.FromContext(ctx)
-
-	scopes := []string{
-		admin.AdminDirectoryUserScope,
-	}
 
 	cfg, err := goauth.JWTConfigFromJSON(sa, scopes...)
 	if err != nil {
@@ -48,11 +76,17 @@ func newClient(sa []byte, adminEmail string) (*admin.Service, error) {
 	}
 	cfg.Subject = adminEmail
 
-	ts := cfg.TokenSource(ctx)
+	return cfg.TokenSource(ctx), nil
+}
 
-	srv, err := admin.NewService(ctx, option.WithTokenSource(ts))
+func newClient(sa []byte, adminEmail string) (*admin.Service, error) {
+	ts, err := tokenSource(sa, adminEmail, admin.AdminDirectoryUserScope)
 	if err != nil {
-		logger.Error("failed to create admin service", "error", err)
+		return nil, err
+	}
+
+	srv, err := admin.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
 		return nil, err
 	}
 	return srv, nil

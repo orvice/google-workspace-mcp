@@ -38,6 +38,45 @@ func (d *Directory) Users(ctx context.Context, request mcp.CallToolRequest) (*mc
 	return mcp.NewToolResultText(resp), nil
 }
 
+func (d *Directory) ListEmail(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	email, ok := request.Params.Arguments["email"].(string)
+	if !ok {
+		return nil, fmt.Errorf("email is required")
+	}
+	srv, err := utils.NewGmailClient(email)
+	if err != nil {
+		return nil, err
+	}
+	// Get list of message IDs
+	messages, err := srv.Users.Messages.List("me").MaxResults(10).Do()
+	if err != nil {
+		return nil, err
+	}
+
+	var resp string
+	// For each message ID, get the full message details
+	for _, msg := range messages.Messages {
+		// Get the full message
+		fullMsg, err := srv.Users.Messages.Get("me", msg.Id).Do()
+		if err != nil {
+			continue
+		}
+
+		// Extract subject from headers
+		var subject string
+		for _, header := range fullMsg.Payload.Headers {
+			if header.Name == "Subject" {
+				subject = header.Value
+				break
+			}
+		}
+
+		resp += fmt.Sprintf("ID: %s, Subject: %s\n", msg.Id, subject)
+	}
+
+	return mcp.NewToolResultText(resp), nil
+}
+
 func (d *Directory) Toolls() []Tool {
 	return []Tool{
 		{
@@ -49,6 +88,16 @@ func (d *Directory) Toolls() []Tool {
 				),
 			),
 			Handler: d.Users,
+		},
+		{
+			Tool: mcp.NewTool("list_gmail",
+				mcp.WithDescription("List Gmail Messages"),
+				mcp.WithString("email",
+					mcp.Required(),
+					mcp.Description("Email address to access Gmail"),
+				),
+			),
+			Handler: d.ListEmail,
 		},
 	}
 }
