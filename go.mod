@@ -4,6 +4,7 @@ go 1.24.1
 
 require (
 	butterfly.orx.me/core v0.0.0-20250326150726-e3b4a5d6dff9
+	github.com/mark3labs/mcp-go v0.17.0
 	golang.org/x/oauth2 v0.28.0
 	google.golang.org/api v0.228.0
 )
@@ -19,6 +20,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
+	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.59.0 // indirect
 	go.opentelemetry.io/otel v1.35.0 // indirect
