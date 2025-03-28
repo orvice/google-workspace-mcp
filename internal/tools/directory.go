@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"go.orx.me/mcp/google-workspace/internal/utils"
@@ -77,6 +78,44 @@ func (d *Directory) ListEmail(ctx context.Context, request mcp.CallToolRequest) 
 	return mcp.NewToolResultText(resp), nil
 }
 
+func (d *Directory) ListCalendarEvents(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	email, ok := request.Params.Arguments["email"].(string)
+	if !ok {
+		return nil, fmt.Errorf("email is required")
+	}
+	
+	// Create calendar client
+	srv, err := utils.NewCalendarClient(email)
+	if err != nil {
+		return nil, err
+	}
+	
+	// Get calendar events for primary calendar
+	timeMin := time.Now().Format(time.RFC3339)
+	timeMax := time.Now().AddDate(0, 0, 7).Format(time.RFC3339) // Get events for next 7 days
+	
+	events, err := srv.Events.List("primary").TimeMin(timeMin).TimeMax(timeMax).MaxResults(10).OrderBy("startTime").SingleEvents(true).Do()
+	if err != nil {
+		return nil, err
+	}
+	
+	var resp string
+	if len(events.Items) == 0 {
+		resp = "No upcoming events found."
+	} else {
+		resp = "Upcoming events:\n"
+		for _, item := range events.Items {
+			date := item.Start.DateTime
+			if date == "" {
+				date = item.Start.Date
+			}
+			resp += fmt.Sprintf("%s (%s)\n", item.Summary, date)
+		}
+	}
+	
+	return mcp.NewToolResultText(resp), nil
+}
+
 func (d *Directory) Toolls() []Tool {
 	return []Tool{
 		{
@@ -98,6 +137,16 @@ func (d *Directory) Toolls() []Tool {
 				),
 			),
 			Handler: d.ListEmail,
+		},
+		{
+			Tool: mcp.NewTool("list_calendar_events",
+				mcp.WithDescription("List Calendar Events"),
+				mcp.WithString("email",
+					mcp.Required(),
+					mcp.Description("Email address to access calendar"),
+				),
+			),
+			Handler: d.ListCalendarEvents,
 		},
 	}
 }

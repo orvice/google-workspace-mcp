@@ -55,12 +55,13 @@ make build
 }
 ```
 
-> **Note:** Make sure your service account has the necessary API access enabled in Google Cloud Console (Admin SDK API and Gmail API).
+> **Note:** Make sure your service account has the necessary API access enabled in Google Cloud Console (Admin SDK API, Gmail API, and Calendar API).
 
 ## Available Tools
 
 - `directory_users` - List all users in your Google Workspace directory
 - `list_gmail` - List recent Gmail messages (requires Gmail API access)
+- `list_calendar_events` - List upcoming calendar events for a user (requires Calendar API access)
 
 ## Required OAuth Scopes
 
@@ -68,3 +69,4 @@ When setting up domain-wide delegation for your service account, ensure you gran
 
 - `https://www.googleapis.com/auth/admin.directory.user` - For accessing directory user information
 - `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages
+- `https://www.googleapis.com/auth/calendar.readonly` - For reading calendar events

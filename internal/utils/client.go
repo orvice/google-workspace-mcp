@@ -9,6 +9,7 @@ import (
 	"golang.org/x/oauth2"
 	goauth "golang.org/x/oauth2/google"
 	admin "google.golang.org/api/admin/directory/v1"
+	"google.golang.org/api/calendar/v3"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 )
@@ -86,6 +87,28 @@ func newClient(sa []byte, adminEmail string) (*admin.Service, error) {
 	}
 
 	srv, err := admin.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, err
+	}
+	return srv, nil
+}
+
+func NewCalendarClient(email string) (*calendar.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
+	}
+	// Create client using service account and email
+	return newCalendarClient(sa, email)
+}
+
+func newCalendarClient(sa []byte, email string) (*calendar.Service, error) {
+	ts, err := tokenSource(sa, email, calendar.CalendarReadonlyScope)
+	if err != nil {
+		return nil, err
+	}
+
+	srv, err := calendar.NewService(context.Background(), option.WithTokenSource(ts))
 	if err != nil {
 		return nil, err
 	}
