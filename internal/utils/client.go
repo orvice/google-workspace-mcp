@@ -103,7 +103,7 @@ func NewCalendarClient(email string) (*calendar.Service, error) {
 }
 
 func newCalendarClient(sa []byte, email string) (*calendar.Service, error) {
-	ts, err := tokenSource(sa, email, calendar.CalendarReadonlyScope)
+	ts, err := tokenSource(sa, email, calendar.CalendarScope)
 	if err != nil {
 		return nil, err
 	}

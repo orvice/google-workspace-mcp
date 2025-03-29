@@ -63,6 +63,7 @@ make build
 - `create_user` - Create a new user in Google Workspace
 - `list_gmail` - List recent Gmail messages (requires Gmail API access)
 - `list_calendar_events` - List upcoming calendar events for a user (requires Calendar API access)
+- `create_calendar_event` - Create a new calendar event (requires Calendar API access)
 
 ## Required OAuth Scopes
 
@@ -70,4 +71,4 @@ When setting up domain-wide delegation for your service account, ensure you gran
 
 - `https://www.googleapis.com/auth/admin.directory.user` - For accessing and managing directory user information
 - `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages
-- `https://www.googleapis.com/auth/calendar.readonly` - For reading calendar events
+- `https://www.googleapis.com/auth/calendar` - For reading and writing calendar events
