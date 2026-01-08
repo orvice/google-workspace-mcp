@@ -1,30 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
 
-	"github.com/mark3labs/mcp-go/server"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.orx.me/mcp/google-workspace/internal/tools"
 )
 
-const (
-	version = "0.0.1"
-)
-
 func main() {
-	// Create MCP server
-	s := server.NewMCPServer(
-		"Google Workspace MCP",
-		version,
-	)
+	server := mcp.NewServer(&mcp.Implementation{
+		Name:    "Google Workspace MCP",
+		Version: "0.0.1",
+	}, nil)
 
-	directory := tools.NewDirectory()
-	for _, tool := range directory.Toolls() {
-		s.AddTool(tool.Tool, tool.Handler)
-	}
+	// Register all tools
+	tools.RegisterAll(server)
 
-	// Start the stdio server
-	if err := server.ServeStdio(s); err != nil {
-		fmt.Printf("Server error: %v\n", err)
+	// Run server over stdio
+	if err := server.Run(context.Background(), &mcp.StdioTransport{}); err != nil {
+		log.Fatal(err)
 	}
 }
