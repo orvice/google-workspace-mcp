@@ -10,6 +10,7 @@ import (
 	goauth "golang.org/x/oauth2/google"
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/calendar/v3"
+	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 )
@@ -109,6 +110,28 @@ func newCalendarClient(sa []byte, email string) (*calendar.Service, error) {
 	}
 
 	srv, err := calendar.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, err
+	}
+	return srv, nil
+}
+
+func NewDriveClient(email string) (*drive.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
+	}
+	// Create client using service account and email
+	return newDriveClient(sa, email)
+}
+
+func newDriveClient(sa []byte, email string) (*drive.Service, error) {
+	ts, err := tokenSource(sa, email, drive.DriveScope)
+	if err != nil {
+		return nil, err
+	}
+
+	srv, err := drive.NewService(context.Background(), option.WithTokenSource(ts))
 	if err != nil {
 		return nil, err
 	}
