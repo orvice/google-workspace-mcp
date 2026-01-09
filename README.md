@@ -55,7 +55,7 @@ make build
 }
 ```
 
-> **Note:** Make sure your service account has the necessary API access enabled in Google Cloud Console (Admin SDK API, Gmail API, Calendar API, and Drive API).
+> **Note:** Make sure your service account has the necessary API access enabled in Google Cloud Console (Admin SDK API, Gmail API, Calendar API, Drive API, Sheets API, and Tasks API).
 
 ## Available Tools
 
@@ -78,6 +78,22 @@ make build
 - `upload_drive_file` - Upload a file to Google Drive (requires Drive API access)
 - `share_drive_file` - Share a Drive file with another user (requires Drive API access)
 
+### Sheets Tools
+- `list_spreadsheets` - List Google Sheets spreadsheets in Drive (requires Sheets API access)
+- `get_spreadsheet` - Get detailed information about a spreadsheet including its sheets (requires Sheets API access)
+- `read_sheet_range` - Read data from a specific range in a spreadsheet (requires Sheets API access)
+- `write_sheet_range` - Write data to a specific range in a spreadsheet (requires Sheets API access)
+- `append_sheet_rows` - Append rows of data to a spreadsheet (requires Sheets API access)
+- `create_spreadsheet` - Create a new Google Sheets spreadsheet (requires Sheets API access)
+
+### Tasks Tools
+- `list_task_lists` - List all Google Tasks task lists for a user (requires Tasks API access)
+- `list_tasks` - List all tasks in a specific task list (requires Tasks API access)
+- `create_task` - Create a new task in a task list (requires Tasks API access)
+- `update_task` - Update an existing task (requires Tasks API access)
+- `delete_task` - Delete a task from a task list (requires Tasks API access)
+- `complete_task` - Mark a task as completed (requires Tasks API access)
+
 ## Required OAuth Scopes
 
 When setting up domain-wide delegation for your service account, ensure you grant the following OAuth scopes:
@@ -86,3 +102,5 @@ When setting up domain-wide delegation for your service account, ensure you gran
 - `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages
 - `https://www.googleapis.com/auth/calendar` - For reading and writing calendar events
 - `https://www.googleapis.com/auth/drive` - For full access to Google Drive (reading, writing, and managing files)
+- `https://www.googleapis.com/auth/spreadsheets` - For reading and writing Google Sheets spreadsheets
+- `https://www.googleapis.com/auth/tasks` - For reading and writing Google Tasks
