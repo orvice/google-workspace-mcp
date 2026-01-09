@@ -14,6 +14,7 @@ import (
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
+	"google.golang.org/api/tasks/v1"
 )
 
 func defaultServiceAccount() ([]byte, error) {
@@ -155,6 +156,28 @@ func newSheetsClient(sa []byte, email string) (*sheets.Service, error) {
 	}
 
 	srv, err := sheets.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, err
+	}
+	return srv, nil
+}
+
+
+func NewTasksClient(email string) (*tasks.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
+	}
+	return newTasksClient(sa, email)
+}
+
+func newTasksClient(sa []byte, email string) (*tasks.Service, error) {
+	ts, err := tokenSource(sa, email, tasks.TasksScope)
+	if err != nil {
+		return nil, err
+	}
+
+	srv, err := tasks.NewService(context.Background(), option.WithTokenSource(ts))
 	if err != nil {
 		return nil, err
 	}

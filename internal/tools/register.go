@@ -11,4 +11,5 @@ func RegisterAll(server *mcp.Server) {
 	RegisterCalendarTools(server)
 	RegisterDriveTools(server)
 	RegisterSheetsTools(server)
+	RegisterTasksTools(server)
 }
