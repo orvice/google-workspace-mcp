@@ -13,6 +13,7 @@ import (
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
+	"google.golang.org/api/sheets/v4"
 )
 
 func defaultServiceAccount() ([]byte, error) {
@@ -132,6 +133,28 @@ func newDriveClient(sa []byte, email string) (*drive.Service, error) {
 	}
 
 	srv, err := drive.NewService(context.Background(), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, err
+	}
+	return srv, nil
+}
+
+func NewSheetsClient(email string) (*sheets.Service, error) {
+	sa, err := defaultServiceAccount()
+	if err != nil {
+		return nil, err
+	}
+	// Create client using service account and email
+	return newSheetsClient(sa, email)
+}
+
+func newSheetsClient(sa []byte, email string) (*sheets.Service, error) {
+	ts, err := tokenSource(sa, email, sheets.SpreadsheetsScope)
+	if err != nil {
+		return nil, err
+	}
+
+	srv, err := sheets.NewService(context.Background(), option.WithTokenSource(ts))
 	if err != nil {
 		return nil, err
 	}
