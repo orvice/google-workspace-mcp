@@ -3,78 +3,77 @@ package tools
 import (
 	"context"
 	"fmt"
-	"log"
 
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.orx.me/mcp/google-workspace/internal/utils"
 	admin "google.golang.org/api/admin/directory/v1"
 )
 
-type Directory struct {
-	client *admin.Service
+// ListUsersInput defines input for directory_users tool
+type ListUsersInput struct {
+	Domain string `json:"domain" jsonschema:"required,description=Domain to list users from"`
 }
 
-func NewDirectory() *Directory {
+// ListUsersOutput defines output for directory_users tool
+type ListUsersOutput struct {
+	Users string `json:"users" jsonschema:"description=List of users with email and name"`
+}
+
+// CreateUserInput defines input for create_user tool
+type CreateUserInput struct {
+	Email     string `json:"email" jsonschema:"required,description=Email address for the new user"`
+	FirstName string `json:"firstName" jsonschema:"required,description=First name of the user"`
+	LastName  string `json:"lastName" jsonschema:"required,description=Last name of the user"`
+	Password  string `json:"password" jsonschema:"required,description=Initial password for the user"`
+}
+
+// CreateUserOutput defines output for create_user tool
+type CreateUserOutput struct {
+	Result string `json:"result" jsonschema:"description=Result of user creation"`
+}
+
+// ListUsers handles the directory_users tool call
+func ListUsers(ctx context.Context, req *mcp.CallToolRequest, input ListUsersInput) (*mcp.CallToolResult, ListUsersOutput, error) {
 	client, err := utils.DefaultClient()
 	if err != nil {
-		log.Fatal("failed to create admin service", "error", err)
+		return nil, ListUsersOutput{}, err
 	}
-	return &Directory{client: client}
-}
 
-func (d *Directory) Users(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	domain, ok := request.Params.Arguments["domain"].(string)
-	if !ok {
-		return nil, fmt.Errorf("domain is required")
-	}
-	users, err := d.client.Users.List().Domain(domain).Do()
+	users, err := client.Users.List().Domain(input.Domain).Do()
 	if err != nil {
-		return nil, err
+		return nil, ListUsersOutput{}, err
 	}
-	var resp string
+
+	var result string
 	for _, user := range users.Users {
-		resp += fmt.Sprintf("Email: %s Name: %s \n", user.PrimaryEmail, user.Name.FullName)
+		result += fmt.Sprintf("Email: %s Name: %s\n", user.PrimaryEmail, user.Name.FullName)
 	}
-	return mcp.NewToolResultText(resp), nil
+
+	return nil, ListUsersOutput{Users: result}, nil
 }
 
-func (d *Directory) CreateUser(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// Extract required parameters
-	email, ok := request.Params.Arguments["email"].(string)
-	if !ok {
-		return nil, fmt.Errorf("email is required")
-	}
-
-	firstName, ok := request.Params.Arguments["firstName"].(string)
-	if !ok {
-		return nil, fmt.Errorf("firstName is required")
-	}
-
-	lastName, ok := request.Params.Arguments["lastName"].(string)
-	if !ok {
-		return nil, fmt.Errorf("lastName is required")
-	}
-
-	password, ok := request.Params.Arguments["password"].(string)
-	if !ok {
-		return nil, fmt.Errorf("password is required")
+// CreateUser handles the create_user tool call
+func CreateUser(ctx context.Context, req *mcp.CallToolRequest, input CreateUserInput) (*mcp.CallToolResult, CreateUserOutput, error) {
+	client, err := utils.DefaultClient()
+	if err != nil {
+		return nil, CreateUserOutput{}, err
 	}
 
 	// Create user object
 	user := &admin.User{
-		PrimaryEmail: email,
+		PrimaryEmail: input.Email,
 		Name: &admin.UserName{
-			GivenName:  firstName,
-			FamilyName: lastName,
-			FullName:   firstName + " " + lastName,
+			GivenName:  input.FirstName,
+			FamilyName: input.LastName,
+			FullName:   input.FirstName + " " + input.LastName,
 		},
-		Password: password,
+		Password: input.Password,
 	}
 
 	// Create user in Google Workspace
-	createdUser, err := d.client.Users.Insert(user).Do()
+	createdUser, err := client.Users.Insert(user).Do()
 	if err != nil {
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, CreateUserOutput{}, fmt.Errorf("failed to create user: %w", err)
 	}
 
 	resp := fmt.Sprintf("User created successfully:\nEmail: %s\nName: %s\nID: %s",
@@ -82,97 +81,18 @@ func (d *Directory) CreateUser(ctx context.Context, request mcp.CallToolRequest)
 		createdUser.Name.FullName,
 		createdUser.Id)
 
-	return mcp.NewToolResultText(resp), nil
+	return nil, CreateUserOutput{Result: resp}, nil
 }
 
-func (d *Directory) ListEmail(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	email, ok := request.Params.Arguments["email"].(string)
-	if !ok {
-		return nil, fmt.Errorf("email is required")
-	}
-	srv, err := utils.NewGmailClient(email)
-	if err != nil {
-		return nil, err
-	}
-	// Get list of message IDs
-	messages, err := srv.Users.Messages.List("me").MaxResults(10).Do()
-	if err != nil {
-		return nil, err
-	}
+// RegisterDirectoryTools registers all directory-related tools with the MCP server
+func RegisterDirectoryTools(server *mcp.Server) {
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "directory_users",
+		Description: "List Directory Users",
+	}, ListUsers)
 
-	var resp string
-	// For each message ID, get the full message details
-	for _, msg := range messages.Messages {
-		// Get the full message
-		fullMsg, err := srv.Users.Messages.Get("me", msg.Id).Do()
-		if err != nil {
-			continue
-		}
-
-		// Extract subject from headers
-		var subject string
-		for _, header := range fullMsg.Payload.Headers {
-			if header.Name == "Subject" {
-				subject = header.Value
-				break
-			}
-		}
-
-		resp += fmt.Sprintf("ID: %s, Subject: %s\n", msg.Id, subject)
-	}
-
-	return mcp.NewToolResultText(resp), nil
-}
-
-func (d *Directory) Toolls() []Tool {
-	tools := []Tool{
-		{
-			Tool: mcp.NewTool("directory_users",
-				mcp.WithDescription("List Directory Users"),
-				mcp.WithString("domain",
-					mcp.Required(),
-					mcp.Description("domain"),
-				),
-			),
-			Handler: d.Users,
-		},
-		{
-			Tool: mcp.NewTool("create_user",
-				mcp.WithDescription("Create a new user in Google Workspace"),
-				mcp.WithString("email",
-					mcp.Required(),
-					mcp.Description("Email address for the new user"),
-				),
-				mcp.WithString("firstName",
-					mcp.Required(),
-					mcp.Description("First name of the user"),
-				),
-				mcp.WithString("lastName",
-					mcp.Required(),
-					mcp.Description("Last name of the user"),
-				),
-				mcp.WithString("password",
-					mcp.Required(),
-					mcp.Description("Initial password for the user"),
-				),
-			),
-			Handler: d.CreateUser,
-		},
-		{
-			Tool: mcp.NewTool("list_gmail",
-				mcp.WithDescription("List Gmail Messages"),
-				mcp.WithString("email",
-					mcp.Required(),
-					mcp.Description("Email address to access Gmail"),
-				),
-			),
-			Handler: d.ListEmail,
-		},
-	}
-
-	// Add calendar tools
-	calendarTools := d.RegisterCalendarTools()
-	tools = append(tools, calendarTools...)
-
-	return tools
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "create_user",
+		Description: "Create a new user in Google Workspace",
+	}, CreateUser)
 }

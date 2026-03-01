@@ -4,9 +4,10 @@ go 1.24.1
 
 require (
 	butterfly.orx.me/core v0.0.0-20250326150726-e3b4a5d6dff9
-	github.com/mark3labs/mcp-go v0.17.0
-	golang.org/x/oauth2 v0.28.0
+	github.com/modelcontextprotocol/go-sdk v1.2.0
+	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.228.0
+	pgregory.net/rapid v1.2.0
 )
 
 require (
@@ -16,6 +17,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/google/jsonschema-go v0.3.0 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
