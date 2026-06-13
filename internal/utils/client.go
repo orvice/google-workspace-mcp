@@ -84,7 +84,11 @@ func tokenSource(sa []byte, adminEmail string, scopes ...string) (oauth2.TokenSo
 }
 
 func newClient(sa []byte, adminEmail string) (*admin.Service, error) {
-	ts, err := tokenSource(sa, adminEmail, admin.AdminDirectoryUserScope)
+	ts, err := tokenSource(sa, adminEmail,
+		admin.AdminDirectoryUserScope,
+		admin.AdminDirectoryGroupScope,
+		admin.AdminDirectoryGroupMemberScope,
+	)
 	if err != nil {
 		return nil, err
 	}
