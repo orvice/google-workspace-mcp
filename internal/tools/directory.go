@@ -84,14 +84,15 @@ func ListUsers(ctx context.Context, req *mcp.CallToolRequest, input ListUsersInp
 		return nil, ListUsersOutput{}, err
 	}
 
-	users, err := client.Users.List().Domain(input.Domain).Do()
+	var result string
+	err = client.Users.List().Domain(input.Domain).Pages(ctx, func(page *admin.Users) error {
+		for _, user := range page.Users {
+			result += fmt.Sprintf("Email: %s Name: %s\n", user.PrimaryEmail, user.Name.FullName)
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, ListUsersOutput{}, err
-	}
-
-	var result string
-	for _, user := range users.Users {
-		result += fmt.Sprintf("Email: %s Name: %s\n", user.PrimaryEmail, user.Name.FullName)
 	}
 
 	return nil, ListUsersOutput{Users: result}, nil

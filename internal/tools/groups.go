@@ -91,18 +91,19 @@ func ListGroups(ctx context.Context, req *mcp.CallToolRequest, input ListGroupsI
 		return nil, ListGroupsOutput{}, err
 	}
 
-	groups, err := client.Groups.List().Domain(input.Domain).Do()
+	var resp string
+	err = client.Groups.List().Domain(input.Domain).Pages(ctx, func(page *admin.Groups) error {
+		for _, g := range page.Groups {
+			resp += fmt.Sprintf("Email: %s Name: %s Members: %d\n", g.Email, g.Name, g.DirectMembersCount)
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, ListGroupsOutput{}, fmt.Errorf("failed to list groups: %w", err)
 	}
 
-	var resp string
-	if len(groups.Groups) == 0 {
+	if resp == "" {
 		resp = "No groups found."
-	} else {
-		for _, g := range groups.Groups {
-			resp += fmt.Sprintf("Email: %s Name: %s Members: %d\n", g.Email, g.Name, g.DirectMembersCount)
-		}
 	}
 
 	return nil, ListGroupsOutput{Groups: resp}, nil
@@ -177,18 +178,19 @@ func ListGroupMembers(ctx context.Context, req *mcp.CallToolRequest, input ListG
 		return nil, ListGroupMembersOutput{}, err
 	}
 
-	members, err := client.Members.List(input.GroupKey).Do()
+	var resp string
+	err = client.Members.List(input.GroupKey).Pages(ctx, func(page *admin.Members) error {
+		for _, m := range page.Members {
+			resp += fmt.Sprintf("Email: %s Role: %s Status: %s\n", m.Email, m.Role, m.Status)
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, ListGroupMembersOutput{}, fmt.Errorf("failed to list group members: %w", err)
 	}
 
-	var resp string
-	if len(members.Members) == 0 {
+	if resp == "" {
 		resp = "No members found."
-	} else {
-		for _, m := range members.Members {
-			resp += fmt.Sprintf("Email: %s Role: %s Status: %s\n", m.Email, m.Role, m.Status)
-		}
 	}
 
 	return nil, ListGroupMembersOutput{Members: resp}, nil

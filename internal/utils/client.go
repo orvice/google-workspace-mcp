@@ -166,7 +166,6 @@ func newSheetsClient(sa []byte, email string) (*sheets.Service, error) {
 	return srv, nil
 }
 
-
 func NewTasksClient(email string) (*tasks.Service, error) {
 	sa, err := defaultServiceAccount()
 	if err != nil {

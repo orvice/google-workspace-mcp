@@ -18,6 +18,17 @@ func allInputStructs() []interface{} {
 	return []interface{}{
 		ListUsersInput{},
 		CreateUserInput{},
+		GetUserInput{},
+		UpdateUserInput{},
+		DeleteUserInput{},
+		SuspendUserInput{},
+		ListGroupsInput{},
+		GetGroupInput{},
+		CreateGroupInput{},
+		DeleteGroupInput{},
+		ListGroupMembersInput{},
+		AddGroupMemberInput{},
+		RemoveGroupMemberInput{},
 		ListGmailInput{},
 		ListCalendarEventsInput{},
 		CreateCalendarEventInput{},
@@ -29,6 +40,17 @@ func allOutputStructs() []interface{} {
 	return []interface{}{
 		ListUsersOutput{},
 		CreateUserOutput{},
+		GetUserOutput{},
+		UpdateUserOutput{},
+		DeleteUserOutput{},
+		SuspendUserOutput{},
+		ListGroupsOutput{},
+		GetGroupOutput{},
+		CreateGroupOutput{},
+		DeleteGroupOutput{},
+		ListGroupMembersOutput{},
+		AddGroupMemberOutput{},
+		RemoveGroupMemberOutput{},
 		ListGmailOutput{},
 		ListCalendarEventsOutput{},
 		CreateCalendarEventOutput{},
@@ -91,11 +113,22 @@ func TestOutputStructTagCompleteness(t *testing.T) {
 func TestRequiredFieldsHaveRequiredTag(t *testing.T) {
 	// Map of struct name to required field names based on requirements
 	requiredFields := map[string][]string{
-		"ListUsersInput":            {"Domain"},
-		"CreateUserInput":           {"Email", "FirstName", "LastName", "Password"},
-		"ListGmailInput":            {"Email"},
-		"ListCalendarEventsInput":   {"Email"},
-		"CreateCalendarEventInput":  {"Email", "Summary", "StartTime", "EndTime"},
+		"ListUsersInput":           {"Domain"},
+		"CreateUserInput":          {"Email", "FirstName", "LastName", "Password"},
+		"GetUserInput":             {"UserKey"},
+		"UpdateUserInput":          {"UserKey"},
+		"DeleteUserInput":          {"UserKey"},
+		"SuspendUserInput":         {"UserKey", "Suspended"},
+		"ListGroupsInput":          {"Domain"},
+		"GetGroupInput":            {"GroupKey"},
+		"CreateGroupInput":         {"Email", "Name"},
+		"DeleteGroupInput":         {"GroupKey"},
+		"ListGroupMembersInput":    {"GroupKey"},
+		"AddGroupMemberInput":      {"GroupKey", "Email"},
+		"RemoveGroupMemberInput":   {"GroupKey", "MemberKey"},
+		"ListGmailInput":           {"Email"},
+		"ListCalendarEventsInput":  {"Email"},
+		"CreateCalendarEventInput": {"Email", "Summary", "StartTime", "EndTime"},
 	}
 
 	for _, input := range allInputStructs() {
@@ -130,6 +163,9 @@ func TestRequiredFieldsHaveRequiredTag(t *testing.T) {
 func TestOptionalFieldsNotRequired(t *testing.T) {
 	// Map of struct name to optional field names
 	optionalFields := map[string][]string{
+		"UpdateUserInput":          {"FirstName", "LastName", "Password", "OrgUnit"},
+		"CreateGroupInput":         {"Description"},
+		"AddGroupMemberInput":      {"Role"},
 		"CreateCalendarEventInput": {"Description"},
 	}
 
