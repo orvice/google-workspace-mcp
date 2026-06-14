@@ -11,77 +11,77 @@ import (
 
 // ListGroupsInput defines input for list_groups tool
 type ListGroupsInput struct {
-	Domain string `json:"domain" jsonschema:"required,description=Domain to list groups from"`
+	Domain string `json:"domain" jsonschema:"Domain to list groups from"`
 }
 
 // ListGroupsOutput defines output for list_groups tool
 type ListGroupsOutput struct {
-	Groups string `json:"groups" jsonschema:"description=List of groups with email and name"`
+	Groups string `json:"groups" jsonschema:"List of groups with email and name"`
 }
 
 // GetGroupInput defines input for get_group tool
 type GetGroupInput struct {
-	GroupKey string `json:"groupKey" jsonschema:"required,description=Group's email address or unique group ID"`
+	GroupKey string `json:"groupKey" jsonschema:"Group's email address or unique group ID"`
 }
 
 // GetGroupOutput defines output for get_group tool
 type GetGroupOutput struct {
-	Group string `json:"group" jsonschema:"description=Detailed information about the group"`
+	Group string `json:"group" jsonschema:"Detailed information about the group"`
 }
 
 // CreateGroupInput defines input for create_group tool
 type CreateGroupInput struct {
-	Email       string `json:"email" jsonschema:"required,description=Email address for the new group"`
-	Name        string `json:"name" jsonschema:"required,description=Display name of the group"`
-	Description string `json:"description,omitempty" jsonschema:"description=Description of the group"`
+	Email       string `json:"email" jsonschema:"Email address for the new group"`
+	Name        string `json:"name" jsonschema:"Display name of the group"`
+	Description string `json:"description,omitempty" jsonschema:"Description of the group"`
 }
 
 // CreateGroupOutput defines output for create_group tool
 type CreateGroupOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of group creation"`
+	Result string `json:"result" jsonschema:"Result of group creation"`
 }
 
 // DeleteGroupInput defines input for delete_group tool
 type DeleteGroupInput struct {
-	GroupKey string `json:"groupKey" jsonschema:"required,description=Group's email address or unique group ID"`
+	GroupKey string `json:"groupKey" jsonschema:"Group's email address or unique group ID"`
 }
 
 // DeleteGroupOutput defines output for delete_group tool
 type DeleteGroupOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of group deletion"`
+	Result string `json:"result" jsonschema:"Result of group deletion"`
 }
 
 // ListGroupMembersInput defines input for list_group_members tool
 type ListGroupMembersInput struct {
-	GroupKey string `json:"groupKey" jsonschema:"required,description=Group's email address or unique group ID"`
+	GroupKey string `json:"groupKey" jsonschema:"Group's email address or unique group ID"`
 }
 
 // ListGroupMembersOutput defines output for list_group_members tool
 type ListGroupMembersOutput struct {
-	Members string `json:"members" jsonschema:"description=List of group members"`
+	Members string `json:"members" jsonschema:"List of group members"`
 }
 
 // AddGroupMemberInput defines input for add_group_member tool
 type AddGroupMemberInput struct {
-	GroupKey string `json:"groupKey" jsonschema:"required,description=Group's email address or unique group ID"`
-	Email    string `json:"email" jsonschema:"required,description=Email address of the member to add"`
-	Role     string `json:"role,omitempty" jsonschema:"description=Member role: MEMBER, MANAGER, or OWNER (defaults to MEMBER)"`
+	GroupKey string `json:"groupKey" jsonschema:"Group's email address or unique group ID"`
+	Email    string `json:"email" jsonschema:"Email address of the member to add"`
+	Role     string `json:"role,omitempty" jsonschema:"Member role: MEMBER, MANAGER, or OWNER (defaults to MEMBER)"`
 }
 
 // AddGroupMemberOutput defines output for add_group_member tool
 type AddGroupMemberOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of adding the member"`
+	Result string `json:"result" jsonschema:"Result of adding the member"`
 }
 
 // RemoveGroupMemberInput defines input for remove_group_member tool
 type RemoveGroupMemberInput struct {
-	GroupKey  string `json:"groupKey" jsonschema:"required,description=Group's email address or unique group ID"`
-	MemberKey string `json:"memberKey" jsonschema:"required,description=Email address or ID of the member to remove"`
+	GroupKey  string `json:"groupKey" jsonschema:"Group's email address or unique group ID"`
+	MemberKey string `json:"memberKey" jsonschema:"Email address or ID of the member to remove"`
 }
 
 // RemoveGroupMemberOutput defines output for remove_group_member tool
 type RemoveGroupMemberOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of removing the member"`
+	Result string `json:"result" jsonschema:"Result of removing the member"`
 }
 
 // ListGroups handles the list_groups tool call

@@ -47,10 +47,6 @@ func TestSheetsInputStructTagCompleteness(t *testing.T) {
 					t.Errorf("Field %s.%s is missing jsonschema tag", structName, fieldName)
 				}
 
-				// Check jsonschema tag has description
-				if jsonschemaTag != "" && !strings.Contains(jsonschemaTag, "description=") {
-					t.Errorf("Field %s.%s jsonschema tag is missing description", structName, fieldName)
-				}
 			}
 		})
 	}
@@ -96,9 +92,9 @@ func TestSheetsRequiredFieldsHaveRequiredTag(t *testing.T) {
 					continue
 				}
 
-				jsonschemaTag := field.Tag.Get("jsonschema")
-				if !strings.Contains(jsonschemaTag, "required") {
-					t.Errorf("Field %s.%s should have 'required' in jsonschema tag", structName, fieldName)
+				jsonTag := field.Tag.Get("json")
+				if strings.Contains(jsonTag, "omitempty") || strings.Contains(jsonTag, "omitzero") {
+					t.Errorf("Required field %s.%s should not be omitempty in json tag", structName, fieldName)
 				}
 			}
 		})
@@ -135,9 +131,9 @@ func TestSheetsOptionalFieldsNotRequired(t *testing.T) {
 					continue
 				}
 
-				jsonschemaTag := field.Tag.Get("jsonschema")
-				if strings.Contains(jsonschemaTag, "required") {
-					t.Errorf("Field %s.%s should NOT have 'required' in jsonschema tag (it's optional)", structName, fieldName)
+				jsonTag := field.Tag.Get("json")
+				if !strings.Contains(jsonTag, "omitempty") && !strings.Contains(jsonTag, "omitzero") {
+					t.Errorf("Optional field %s.%s should be omitempty in json tag", structName, fieldName)
 				}
 			}
 		})
@@ -660,10 +656,10 @@ func TestProperty6_ValuesFieldType(t *testing.T) {
 			t.Fatalf("Values field type should be %s, got %s", expectedType, field.Type.String())
 		}
 
-		// Property: Field must have required tag
-		jsonschemaTag := field.Tag.Get("jsonschema")
-		if !strings.Contains(jsonschemaTag, "required") {
-			t.Fatal("Values field should have 'required' in jsonschema tag")
+		// Property: Field must be required (no omitempty in json tag)
+		jsonTag := field.Tag.Get("json")
+		if strings.Contains(jsonTag, "omitempty") || strings.Contains(jsonTag, "omitzero") {
+			t.Fatal("Values field should not be omitempty in json tag")
 		}
 	})
 }

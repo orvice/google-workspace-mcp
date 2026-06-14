@@ -11,70 +11,70 @@ import (
 
 // ListUsersInput defines input for directory_users tool
 type ListUsersInput struct {
-	Domain string `json:"domain" jsonschema:"required,description=Domain to list users from"`
+	Domain string `json:"domain" jsonschema:"Domain to list users from"`
 }
 
 // ListUsersOutput defines output for directory_users tool
 type ListUsersOutput struct {
-	Users string `json:"users" jsonschema:"description=List of users with email and name"`
+	Users string `json:"users" jsonschema:"List of users with email and name"`
 }
 
 // CreateUserInput defines input for create_user tool
 type CreateUserInput struct {
-	Email     string `json:"email" jsonschema:"required,description=Email address for the new user"`
-	FirstName string `json:"firstName" jsonschema:"required,description=First name of the user"`
-	LastName  string `json:"lastName" jsonschema:"required,description=Last name of the user"`
-	Password  string `json:"password" jsonschema:"required,description=Initial password for the user"`
+	Email     string `json:"email" jsonschema:"Email address for the new user"`
+	FirstName string `json:"firstName" jsonschema:"First name of the user"`
+	LastName  string `json:"lastName" jsonschema:"Last name of the user"`
+	Password  string `json:"password" jsonschema:"Initial password for the user"`
 }
 
 // CreateUserOutput defines output for create_user tool
 type CreateUserOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of user creation"`
+	Result string `json:"result" jsonschema:"Result of user creation"`
 }
 
 // GetUserInput defines input for get_user tool
 type GetUserInput struct {
-	UserKey string `json:"userKey" jsonschema:"required,description=User's primary email address or unique user ID"`
+	UserKey string `json:"userKey" jsonschema:"User's primary email address or unique user ID"`
 }
 
 // GetUserOutput defines output for get_user tool
 type GetUserOutput struct {
-	User string `json:"user" jsonschema:"description=Detailed information about the user"`
+	User string `json:"user" jsonschema:"Detailed information about the user"`
 }
 
 // UpdateUserInput defines input for update_user tool
 type UpdateUserInput struct {
-	UserKey   string `json:"userKey" jsonschema:"required,description=User's primary email address or unique user ID"`
-	FirstName string `json:"firstName,omitempty" jsonschema:"description=New first (given) name"`
-	LastName  string `json:"lastName,omitempty" jsonschema:"description=New last (family) name"`
-	Password  string `json:"password,omitempty" jsonschema:"description=New password for the user"`
-	OrgUnit   string `json:"orgUnitPath,omitempty" jsonschema:"description=Organizational unit path to move the user to (e.g. /Sales)"`
+	UserKey   string `json:"userKey" jsonschema:"User's primary email address or unique user ID"`
+	FirstName string `json:"firstName,omitempty" jsonschema:"New first (given) name"`
+	LastName  string `json:"lastName,omitempty" jsonschema:"New last (family) name"`
+	Password  string `json:"password,omitempty" jsonschema:"New password for the user"`
+	OrgUnit   string `json:"orgUnitPath,omitempty" jsonschema:"Organizational unit path to move the user to (e.g. /Sales)"`
 }
 
 // UpdateUserOutput defines output for update_user tool
 type UpdateUserOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of user update"`
+	Result string `json:"result" jsonschema:"Result of user update"`
 }
 
 // DeleteUserInput defines input for delete_user tool
 type DeleteUserInput struct {
-	UserKey string `json:"userKey" jsonschema:"required,description=User's primary email address or unique user ID"`
+	UserKey string `json:"userKey" jsonschema:"User's primary email address or unique user ID"`
 }
 
 // DeleteUserOutput defines output for delete_user tool
 type DeleteUserOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of user deletion"`
+	Result string `json:"result" jsonschema:"Result of user deletion"`
 }
 
 // SuspendUserInput defines input for suspend_user tool
 type SuspendUserInput struct {
-	UserKey   string `json:"userKey" jsonschema:"required,description=User's primary email address or unique user ID"`
-	Suspended bool   `json:"suspended" jsonschema:"required,description=Set true to suspend the account, false to restore it"`
+	UserKey   string `json:"userKey" jsonschema:"User's primary email address or unique user ID"`
+	Suspended bool   `json:"suspended" jsonschema:"Set true to suspend the account, false to restore it"`
 }
 
 // SuspendUserOutput defines output for suspend_user tool
 type SuspendUserOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of suspending or restoring the user"`
+	Result string `json:"result" jsonschema:"Result of suspending or restoring the user"`
 }
 
 // ListUsers handles the directory_users tool call
