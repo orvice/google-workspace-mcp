@@ -11,78 +11,78 @@ import (
 
 // ListTaskListsInput defines input for list_task_lists tool
 type ListTaskListsInput struct {
-	Email string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
+	Email string `json:"email" jsonschema:"Email address to access Google Tasks"`
 }
 
 // ListTaskListsOutput defines output for list_task_lists tool
 type ListTaskListsOutput struct {
-	TaskLists string `json:"taskLists" jsonschema:"description=List of task lists"`
+	TaskLists string `json:"taskLists" jsonschema:"List of task lists"`
 }
 
 // ListTasksInput defines input for list_tasks tool
 type ListTasksInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
-	TaskListID string `json:"taskListId" jsonschema:"required,description=Task list identifier (use @default for the default task list)"`
+	Email      string `json:"email" jsonschema:"Email address to access Google Tasks"`
+	TaskListID string `json:"taskListId" jsonschema:"Task list identifier (use @default for the default task list)"`
 }
 
 // ListTasksOutput defines output for list_tasks tool
 type ListTasksOutput struct {
-	Tasks string `json:"tasks" jsonschema:"description=List of tasks"`
+	Tasks string `json:"tasks" jsonschema:"List of tasks"`
 }
 
 // CreateTaskInput defines input for create_task tool
 type CreateTaskInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
-	TaskListID string `json:"taskListId" jsonschema:"required,description=Task list identifier (use @default for the default task list)"`
-	Title      string `json:"title" jsonschema:"required,description=Title of the task"`
-	Notes      string `json:"notes,omitempty" jsonschema:"description=Notes describing the task"`
-	Due        string `json:"due,omitempty" jsonschema:"description=Due date in RFC3339 format (e.g. 2024-12-31T00:00:00Z)"`
+	Email      string `json:"email" jsonschema:"Email address to access Google Tasks"`
+	TaskListID string `json:"taskListId" jsonschema:"Task list identifier (use @default for the default task list)"`
+	Title      string `json:"title" jsonschema:"Title of the task"`
+	Notes      string `json:"notes,omitempty" jsonschema:"Notes describing the task"`
+	Due        string `json:"due,omitempty" jsonschema:"Due date in RFC3339 format (e.g. 2024-12-31T00:00:00Z)"`
 }
 
 // CreateTaskOutput defines output for create_task tool
 type CreateTaskOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of task creation"`
+	Result string `json:"result" jsonschema:"Result of task creation"`
 }
 
 
 // UpdateTaskInput defines input for update_task tool
 type UpdateTaskInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
-	TaskListID string `json:"taskListId" jsonschema:"required,description=Task list identifier"`
-	TaskID     string `json:"taskId" jsonschema:"required,description=Task identifier"`
-	Title      string `json:"title,omitempty" jsonschema:"description=New title of the task"`
-	Notes      string `json:"notes,omitempty" jsonschema:"description=New notes for the task"`
-	Status     string `json:"status,omitempty" jsonschema:"description=Task status: needsAction or completed"`
-	Due        string `json:"due,omitempty" jsonschema:"description=Due date in RFC3339 format"`
+	Email      string `json:"email" jsonschema:"Email address to access Google Tasks"`
+	TaskListID string `json:"taskListId" jsonschema:"Task list identifier"`
+	TaskID     string `json:"taskId" jsonschema:"Task identifier"`
+	Title      string `json:"title,omitempty" jsonschema:"New title of the task"`
+	Notes      string `json:"notes,omitempty" jsonschema:"New notes for the task"`
+	Status     string `json:"status,omitempty" jsonschema:"Task status: needsAction or completed"`
+	Due        string `json:"due,omitempty" jsonschema:"Due date in RFC3339 format"`
 }
 
 // UpdateTaskOutput defines output for update_task tool
 type UpdateTaskOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of task update"`
+	Result string `json:"result" jsonschema:"Result of task update"`
 }
 
 // DeleteTaskInput defines input for delete_task tool
 type DeleteTaskInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
-	TaskListID string `json:"taskListId" jsonschema:"required,description=Task list identifier"`
-	TaskID     string `json:"taskId" jsonschema:"required,description=Task identifier"`
+	Email      string `json:"email" jsonschema:"Email address to access Google Tasks"`
+	TaskListID string `json:"taskListId" jsonschema:"Task list identifier"`
+	TaskID     string `json:"taskId" jsonschema:"Task identifier"`
 }
 
 // DeleteTaskOutput defines output for delete_task tool
 type DeleteTaskOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of task deletion"`
+	Result string `json:"result" jsonschema:"Result of task deletion"`
 }
 
 // CompleteTaskInput defines input for complete_task tool
 type CompleteTaskInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Google Tasks"`
-	TaskListID string `json:"taskListId" jsonschema:"required,description=Task list identifier"`
-	TaskID     string `json:"taskId" jsonschema:"required,description=Task identifier"`
+	Email      string `json:"email" jsonschema:"Email address to access Google Tasks"`
+	TaskListID string `json:"taskListId" jsonschema:"Task list identifier"`
+	TaskID     string `json:"taskId" jsonschema:"Task identifier"`
 }
 
 // CompleteTaskOutput defines output for complete_task tool
 type CompleteTaskOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of marking task as completed"`
+	Result string `json:"result" jsonschema:"Result of marking task as completed"`
 }
 
 // ListTaskLists handles the list_task_lists tool call

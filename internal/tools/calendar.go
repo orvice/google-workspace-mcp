@@ -12,26 +12,26 @@ import (
 
 // ListCalendarEventsInput defines input for list_calendar_events tool
 type ListCalendarEventsInput struct {
-	Email string `json:"email" jsonschema:"required,description=Email address to access calendar"`
+	Email string `json:"email" jsonschema:"Email address to access calendar"`
 }
 
 // ListCalendarEventsOutput defines output for list_calendar_events tool
 type ListCalendarEventsOutput struct {
-	Events string `json:"events" jsonschema:"description=List of upcoming events"`
+	Events string `json:"events" jsonschema:"List of upcoming events"`
 }
 
 // CreateCalendarEventInput defines input for create_calendar_event tool
 type CreateCalendarEventInput struct {
-	Email       string `json:"email" jsonschema:"required,description=Email address to access calendar"`
-	Summary     string `json:"summary" jsonschema:"required,description=Event title/summary"`
-	Description string `json:"description,omitempty" jsonschema:"description=Event description"`
-	StartTime   string `json:"startTime" jsonschema:"required,description=Start time in RFC3339 format"`
-	EndTime     string `json:"endTime" jsonschema:"required,description=End time in RFC3339 format"`
+	Email       string `json:"email" jsonschema:"Email address to access calendar"`
+	Summary     string `json:"summary" jsonschema:"Event title/summary"`
+	Description string `json:"description,omitempty" jsonschema:"Event description"`
+	StartTime   string `json:"startTime" jsonschema:"Start time in RFC3339 format"`
+	EndTime     string `json:"endTime" jsonschema:"End time in RFC3339 format"`
 }
 
 // CreateCalendarEventOutput defines output for create_calendar_event tool
 type CreateCalendarEventOutput struct {
-	Result string `json:"result" jsonschema:"description=Result of event creation"`
+	Result string `json:"result" jsonschema:"Result of event creation"`
 }
 
 // ListCalendarEvents handles the list_calendar_events tool call

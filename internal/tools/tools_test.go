@@ -18,6 +18,17 @@ func allInputStructs() []interface{} {
 	return []interface{}{
 		ListUsersInput{},
 		CreateUserInput{},
+		GetUserInput{},
+		UpdateUserInput{},
+		DeleteUserInput{},
+		SuspendUserInput{},
+		ListGroupsInput{},
+		GetGroupInput{},
+		CreateGroupInput{},
+		DeleteGroupInput{},
+		ListGroupMembersInput{},
+		AddGroupMemberInput{},
+		RemoveGroupMemberInput{},
 		ListGmailInput{},
 		ListCalendarEventsInput{},
 		CreateCalendarEventInput{},
@@ -29,6 +40,17 @@ func allOutputStructs() []interface{} {
 	return []interface{}{
 		ListUsersOutput{},
 		CreateUserOutput{},
+		GetUserOutput{},
+		UpdateUserOutput{},
+		DeleteUserOutput{},
+		SuspendUserOutput{},
+		ListGroupsOutput{},
+		GetGroupOutput{},
+		CreateGroupOutput{},
+		DeleteGroupOutput{},
+		ListGroupMembersOutput{},
+		AddGroupMemberOutput{},
+		RemoveGroupMemberOutput{},
 		ListGmailOutput{},
 		ListCalendarEventsOutput{},
 		CreateCalendarEventOutput{},
@@ -52,15 +74,12 @@ func TestInputStructTagCompleteness(t *testing.T) {
 					t.Errorf("Field %s.%s is missing json tag", structName, fieldName)
 				}
 
-				// Check jsonschema tag exists
+				// Check jsonschema tag exists. With jsonschema-go, the entire
+				// tag value is the field description, so a non-empty tag is all
+				// that's required.
 				jsonschemaTag := field.Tag.Get("jsonschema")
 				if jsonschemaTag == "" {
 					t.Errorf("Field %s.%s is missing jsonschema tag", structName, fieldName)
-				}
-
-				// Check jsonschema tag has description
-				if jsonschemaTag != "" && !strings.Contains(jsonschemaTag, "description=") {
-					t.Errorf("Field %s.%s jsonschema tag is missing description", structName, fieldName)
 				}
 			}
 		})
@@ -88,15 +107,28 @@ func TestOutputStructTagCompleteness(t *testing.T) {
 	}
 }
 
-// TestRequiredFieldsHaveRequiredTag verifies that required Input fields have the required jsonschema tag
+// TestRequiredFieldsHaveRequiredTag verifies that required Input fields are not
+// marked omitempty in their json tag. With jsonschema-go, a field is required
+// unless its json tag carries omitempty/omitzero.
 func TestRequiredFieldsHaveRequiredTag(t *testing.T) {
 	// Map of struct name to required field names based on requirements
 	requiredFields := map[string][]string{
-		"ListUsersInput":            {"Domain"},
-		"CreateUserInput":           {"Email", "FirstName", "LastName", "Password"},
-		"ListGmailInput":            {"Email"},
-		"ListCalendarEventsInput":   {"Email"},
-		"CreateCalendarEventInput":  {"Email", "Summary", "StartTime", "EndTime"},
+		"ListUsersInput":           {"Domain"},
+		"CreateUserInput":          {"Email", "FirstName", "LastName", "Password"},
+		"GetUserInput":             {"UserKey"},
+		"UpdateUserInput":          {"UserKey"},
+		"DeleteUserInput":          {"UserKey"},
+		"SuspendUserInput":         {"UserKey", "Suspended"},
+		"ListGroupsInput":          {"Domain"},
+		"GetGroupInput":            {"GroupKey"},
+		"CreateGroupInput":         {"Email", "Name"},
+		"DeleteGroupInput":         {"GroupKey"},
+		"ListGroupMembersInput":    {"GroupKey"},
+		"AddGroupMemberInput":      {"GroupKey", "Email"},
+		"RemoveGroupMemberInput":   {"GroupKey", "MemberKey"},
+		"ListGmailInput":           {"Email"},
+		"ListCalendarEventsInput":  {"Email"},
+		"CreateCalendarEventInput": {"Email", "Summary", "StartTime", "EndTime"},
 	}
 
 	for _, input := range allInputStructs() {
@@ -117,19 +149,23 @@ func TestRequiredFieldsHaveRequiredTag(t *testing.T) {
 					continue
 				}
 
-				jsonschemaTag := field.Tag.Get("jsonschema")
-				if !strings.Contains(jsonschemaTag, "required") {
-					t.Errorf("Field %s.%s should have 'required' in jsonschema tag", structName, fieldName)
+				jsonTag := field.Tag.Get("json")
+				if strings.Contains(jsonTag, "omitempty") || strings.Contains(jsonTag, "omitzero") {
+					t.Errorf("Required field %s.%s should not be omitempty in json tag", structName, fieldName)
 				}
 			}
 		})
 	}
 }
 
-// TestOptionalFieldsNotRequired verifies that optional fields don't have required tag
+// TestOptionalFieldsNotRequired verifies that optional fields carry omitempty in
+// their json tag, which is what marks them optional for jsonschema-go.
 func TestOptionalFieldsNotRequired(t *testing.T) {
 	// Map of struct name to optional field names
 	optionalFields := map[string][]string{
+		"UpdateUserInput":          {"FirstName", "LastName", "Password", "OrgUnit"},
+		"CreateGroupInput":         {"Description"},
+		"AddGroupMemberInput":      {"Role"},
 		"CreateCalendarEventInput": {"Description"},
 	}
 
@@ -151,9 +187,9 @@ func TestOptionalFieldsNotRequired(t *testing.T) {
 					continue
 				}
 
-				jsonschemaTag := field.Tag.Get("jsonschema")
-				if strings.Contains(jsonschemaTag, "required") {
-					t.Errorf("Field %s.%s should NOT have 'required' in jsonschema tag (it's optional)", structName, fieldName)
+				jsonTag := field.Tag.Get("json")
+				if !strings.Contains(jsonTag, "omitempty") && !strings.Contains(jsonTag, "omitzero") {
+					t.Errorf("Optional field %s.%s should be omitempty in json tag", structName, fieldName)
 				}
 			}
 		})

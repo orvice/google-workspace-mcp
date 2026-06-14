@@ -12,75 +12,75 @@ import (
 
 // ListSpreadsheetsInput defines input for list_spreadsheets tool
 type ListSpreadsheetsInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"description=Maximum number of spreadsheets to return (default 10)"`
+	Email      string `json:"email" jsonschema:"Email address to access Sheets"`
+	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"Maximum number of spreadsheets to return (default 10)"`
 }
 
 // ListSpreadsheetsOutput defines output for list_spreadsheets tool
 type ListSpreadsheetsOutput struct {
-	Spreadsheets string `json:"spreadsheets" jsonschema:"description=List of spreadsheets"`
+	Spreadsheets string `json:"spreadsheets" jsonschema:"List of spreadsheets"`
 }
 
 // GetSpreadsheetInput defines input for get_spreadsheet tool
 type GetSpreadsheetInput struct {
-	Email         string `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	SpreadsheetID string `json:"spreadsheetId" jsonschema:"required,description=Spreadsheet ID"`
+	Email         string `json:"email" jsonschema:"Email address to access Sheets"`
+	SpreadsheetID string `json:"spreadsheetId" jsonschema:"Spreadsheet ID"`
 }
 
 // GetSpreadsheetOutput defines output for get_spreadsheet tool
 type GetSpreadsheetOutput struct {
-	Info string `json:"info" jsonschema:"description=Spreadsheet information"`
+	Info string `json:"info" jsonschema:"Spreadsheet information"`
 }
 
 // ReadSheetRangeInput defines input for read_sheet_range tool
 type ReadSheetRangeInput struct {
-	Email         string `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	SpreadsheetID string `json:"spreadsheetId" jsonschema:"required,description=Spreadsheet ID"`
-	Range         string `json:"range" jsonschema:"required,description=A1 notation range (e.g. Sheet1!A1:B10)"`
+	Email         string `json:"email" jsonschema:"Email address to access Sheets"`
+	SpreadsheetID string `json:"spreadsheetId" jsonschema:"Spreadsheet ID"`
+	Range         string `json:"range" jsonschema:"A1 notation range (e.g. Sheet1!A1:B10)"`
 }
 
 // ReadSheetRangeOutput defines output for read_sheet_range tool
 type ReadSheetRangeOutput struct {
-	Data string `json:"data" jsonschema:"description=Cell data in table format"`
+	Data string `json:"data" jsonschema:"Cell data in table format"`
 }
 
 // WriteSheetRangeInput defines input for write_sheet_range tool
 type WriteSheetRangeInput struct {
-	Email         string          `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	SpreadsheetID string          `json:"spreadsheetId" jsonschema:"required,description=Spreadsheet ID"`
-	Range         string          `json:"range" jsonschema:"required,description=A1 notation range (e.g. Sheet1!A1:B10)"`
-	Values        [][]interface{} `json:"values" jsonschema:"required,description=2D array of values to write"`
+	Email         string          `json:"email" jsonschema:"Email address to access Sheets"`
+	SpreadsheetID string          `json:"spreadsheetId" jsonschema:"Spreadsheet ID"`
+	Range         string          `json:"range" jsonschema:"A1 notation range (e.g. Sheet1!A1:B10)"`
+	Values        [][]interface{} `json:"values" jsonschema:"2D array of values to write"`
 }
 
 // WriteSheetRangeOutput defines output for write_sheet_range tool
 type WriteSheetRangeOutput struct {
-	Result string `json:"result" jsonschema:"description=Write operation result"`
+	Result string `json:"result" jsonschema:"Write operation result"`
 }
 
 
 // AppendSheetRowsInput defines input for append_sheet_rows tool
 type AppendSheetRowsInput struct {
-	Email         string          `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	SpreadsheetID string          `json:"spreadsheetId" jsonschema:"required,description=Spreadsheet ID"`
-	Range         string          `json:"range" jsonschema:"required,description=A1 notation range to append after (e.g. Sheet1!A:A)"`
-	Values        [][]interface{} `json:"values" jsonschema:"required,description=2D array of rows to append"`
+	Email         string          `json:"email" jsonschema:"Email address to access Sheets"`
+	SpreadsheetID string          `json:"spreadsheetId" jsonschema:"Spreadsheet ID"`
+	Range         string          `json:"range" jsonschema:"A1 notation range to append after (e.g. Sheet1!A:A)"`
+	Values        [][]interface{} `json:"values" jsonschema:"2D array of rows to append"`
 }
 
 // AppendSheetRowsOutput defines output for append_sheet_rows tool
 type AppendSheetRowsOutput struct {
-	Result string `json:"result" jsonschema:"description=Append operation result"`
+	Result string `json:"result" jsonschema:"Append operation result"`
 }
 
 // CreateSpreadsheetInput defines input for create_spreadsheet tool
 type CreateSpreadsheetInput struct {
-	Email      string   `json:"email" jsonschema:"required,description=Email address to access Sheets"`
-	Title      string   `json:"title" jsonschema:"required,description=Spreadsheet title"`
-	SheetNames []string `json:"sheetNames,omitempty" jsonschema:"description=Optional list of sheet names to create"`
+	Email      string   `json:"email" jsonschema:"Email address to access Sheets"`
+	Title      string   `json:"title" jsonschema:"Spreadsheet title"`
+	SheetNames []string `json:"sheetNames,omitempty" jsonschema:"Optional list of sheet names to create"`
 }
 
 // CreateSpreadsheetOutput defines output for create_spreadsheet tool
 type CreateSpreadsheetOutput struct {
-	Result string `json:"result" jsonschema:"description=Created spreadsheet information"`
+	Result string `json:"result" jsonschema:"Created spreadsheet information"`
 }
 
 // ListSpreadsheets handles the list_spreadsheets tool call

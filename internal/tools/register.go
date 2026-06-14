@@ -7,6 +7,7 @@ import "github.com/modelcontextprotocol/go-sdk/mcp"
 // Google Workspace tools (Directory, Gmail, Calendar, Drive, Sheets).
 func RegisterAll(server *mcp.Server) {
 	RegisterDirectoryTools(server)
+	RegisterGroupsTools(server)
 	RegisterGmailTools(server)
 	RegisterCalendarTools(server)
 	RegisterDriveTools(server)

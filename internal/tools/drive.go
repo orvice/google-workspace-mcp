@@ -13,75 +13,75 @@ import (
 
 // ListDriveFilesInput defines input for list_drive_files tool
 type ListDriveFilesInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"description=Maximum number of files to return (default 10)"`
-	FolderID   string `json:"folderId,omitempty" jsonschema:"description=Optional folder ID to list files from"`
+	Email      string `json:"email" jsonschema:"Email address to access Drive"`
+	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"Maximum number of files to return (default 10)"`
+	FolderID   string `json:"folderId,omitempty" jsonschema:"Optional folder ID to list files from"`
 }
 
 // ListDriveFilesOutput defines output for list_drive_files tool
 type ListDriveFilesOutput struct {
-	Files string `json:"files" jsonschema:"description=List of files"`
+	Files string `json:"files" jsonschema:"List of files"`
 }
 
 // SearchDriveFilesInput defines input for search_drive_files tool
 type SearchDriveFilesInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	Query      string `json:"query" jsonschema:"required,description=Search query"`
-	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"description=Maximum number of files to return (default 10)"`
+	Email      string `json:"email" jsonschema:"Email address to access Drive"`
+	Query      string `json:"query" jsonschema:"Search query"`
+	MaxResults int64  `json:"maxResults,omitempty" jsonschema:"Maximum number of files to return (default 10)"`
 }
 
 // SearchDriveFilesOutput defines output for search_drive_files tool
 type SearchDriveFilesOutput struct {
-	Files string `json:"files" jsonschema:"description=Search results"`
+	Files string `json:"files" jsonschema:"Search results"`
 }
 
 // GetDriveFileInput defines input for get_drive_file tool
 type GetDriveFileInput struct {
-	Email  string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	FileID string `json:"fileId" jsonschema:"required,description=File ID to retrieve"`
+	Email  string `json:"email" jsonschema:"Email address to access Drive"`
+	FileID string `json:"fileId" jsonschema:"File ID to retrieve"`
 }
 
 // GetDriveFileOutput defines output for get_drive_file tool
 type GetDriveFileOutput struct {
-	FileInfo string `json:"fileInfo" jsonschema:"description=File information"`
+	FileInfo string `json:"fileInfo" jsonschema:"File information"`
 }
 
 // CreateDriveFolderInput defines input for create_drive_folder tool
 type CreateDriveFolderInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	Name       string `json:"name" jsonschema:"required,description=Folder name"`
-	ParentID   string `json:"parentId,omitempty" jsonschema:"description=Parent folder ID (optional)"`
+	Email      string `json:"email" jsonschema:"Email address to access Drive"`
+	Name       string `json:"name" jsonschema:"Folder name"`
+	ParentID   string `json:"parentId,omitempty" jsonschema:"Parent folder ID (optional)"`
 }
 
 // CreateDriveFolderOutput defines output for create_drive_folder tool
 type CreateDriveFolderOutput struct {
-	Result string `json:"result" jsonschema:"description=Created folder information"`
+	Result string `json:"result" jsonschema:"Created folder information"`
 }
 
 // UploadDriveFileInput defines input for upload_drive_file tool
 type UploadDriveFileInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	FilePath   string `json:"filePath" jsonschema:"required,description=Local file path to upload"`
-	Name       string `json:"name,omitempty" jsonschema:"description=Name for the file in Drive (uses filename if not specified)"`
-	ParentID   string `json:"parentId,omitempty" jsonschema:"description=Parent folder ID (optional)"`
+	Email      string `json:"email" jsonschema:"Email address to access Drive"`
+	FilePath   string `json:"filePath" jsonschema:"Local file path to upload"`
+	Name       string `json:"name,omitempty" jsonschema:"Name for the file in Drive (uses filename if not specified)"`
+	ParentID   string `json:"parentId,omitempty" jsonschema:"Parent folder ID (optional)"`
 }
 
 // UploadDriveFileOutput defines output for upload_drive_file tool
 type UploadDriveFileOutput struct {
-	Result string `json:"result" jsonschema:"description=Uploaded file information"`
+	Result string `json:"result" jsonschema:"Uploaded file information"`
 }
 
 // ShareDriveFileInput defines input for share_drive_file tool
 type ShareDriveFileInput struct {
-	Email      string `json:"email" jsonschema:"required,description=Email address to access Drive"`
-	FileID     string `json:"fileId" jsonschema:"required,description=File ID to share"`
-	UserEmail  string `json:"userEmail" jsonschema:"required,description=Email address to share with"`
-	Role       string `json:"role,omitempty" jsonschema:"description=Permission role: reader, writer, commenter (default: reader)"`
+	Email      string `json:"email" jsonschema:"Email address to access Drive"`
+	FileID     string `json:"fileId" jsonschema:"File ID to share"`
+	UserEmail  string `json:"userEmail" jsonschema:"Email address to share with"`
+	Role       string `json:"role,omitempty" jsonschema:"Permission role: reader, writer, commenter (default: reader)"`
 }
 
 // ShareDriveFileOutput defines output for share_drive_file tool
 type ShareDriveFileOutput struct {
-	Result string `json:"result" jsonschema:"description=Share result"`
+	Result string `json:"result" jsonschema:"Share result"`
 }
 
 // ListDriveFiles handles the list_drive_files tool call

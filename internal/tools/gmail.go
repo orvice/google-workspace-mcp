@@ -10,12 +10,12 @@ import (
 
 // ListGmailInput defines input for list_gmail tool
 type ListGmailInput struct {
-	Email string `json:"email" jsonschema:"required,description=Email address to access Gmail"`
+	Email string `json:"email" jsonschema:"Email address to access Gmail"`
 }
 
 // ListGmailOutput defines output for list_gmail tool
 type ListGmailOutput struct {
-	Messages string `json:"messages" jsonschema:"description=List of recent messages"`
+	Messages string `json:"messages" jsonschema:"List of recent messages"`
 }
 
 // ListGmail handles the list_gmail tool call
