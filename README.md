@@ -27,6 +27,27 @@ The application requires the following environment variables to be set:
 | `GOOGLE_SERVICE_ACCOUNT` | The path to the service account JSON key file |
 | `GOOGLE_ADMIN_EMAIL` | The email address of the Google Workspace admin user to impersonate |
 
+### Transport (optional)
+
+By default the server runs over stdio. Set `MCP_TRANSPORT=http` to serve over the
+Streamable HTTP transport instead.
+
+| Variable | Description |
+|----------|-------------|
+| `MCP_TRANSPORT` | Transport to use: `stdio` (default) or `http` |
+| `MCP_HTTP_ADDR` | Listen address for HTTP transport (default `:8080`) |
+| `MCP_AUTH_TOKEN` | When set, HTTP requests must include `Authorization: Bearer <token>` |
+
+```bash
+MCP_TRANSPORT=http MCP_HTTP_ADDR=:8080 MCP_AUTH_TOKEN=your-secret-token google-workspace-mcp
+```
+
+Clients then connect to `http://<host>:8080/` and send the bearer token, e.g.:
+
+```
+Authorization: Bearer your-secret-token
+```
+
 ## Usage
 
 ### Build
@@ -62,6 +83,19 @@ make build
 ### Directory Tools
 - `directory_users` - List all users in your Google Workspace directory
 - `create_user` - Create a new user in Google Workspace
+- `get_user` - Get detailed information about a specific user
+- `update_user` - Update an existing user's name, password, or organizational unit
+- `delete_user` - Delete a user from Google Workspace
+- `suspend_user` - Suspend or restore a user account
+
+### Group Tools
+- `list_groups` - List groups in a domain
+- `get_group` - Get detailed information about a specific group
+- `create_group` - Create a new group in Google Workspace
+- `delete_group` - Delete a group from Google Workspace
+- `list_group_members` - List members of a group
+- `add_group_member` - Add a member to a group
+- `remove_group_member` - Remove a member from a group
 
 ### Gmail Tools
 - `list_gmail` - List recent Gmail messages (requires Gmail API access)
@@ -99,6 +133,8 @@ make build
 When setting up domain-wide delegation for your service account, ensure you grant the following OAuth scopes:
 
 - `https://www.googleapis.com/auth/admin.directory.user` - For accessing and managing directory user information
+- `https://www.googleapis.com/auth/admin.directory.group` - For managing groups
+- `https://www.googleapis.com/auth/admin.directory.group.member` - For managing group members
 - `https://www.googleapis.com/auth/gmail.readonly` - For reading Gmail messages
 - `https://www.googleapis.com/auth/calendar` - For reading and writing calendar events
 - `https://www.googleapis.com/auth/drive` - For full access to Google Drive (reading, writing, and managing files)
